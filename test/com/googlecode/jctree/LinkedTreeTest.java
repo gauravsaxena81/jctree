@@ -1,3 +1,16 @@
+/*
+ * Copyright 2014 Gaurav Saxena
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.googlecode.jctree;
 
 import java.util.Arrays;
@@ -7,35 +20,35 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.googlecode.jctree.MapIndexedArrayListTree;
+import com.googlecode.jctree.LinkedTree;
 import com.googlecode.jctree.NodeNotFoundException;
 
-class MapIndexedArrayListTreeTest {
+public class LinkedTreeTest {
 	@DataProvider
 	public Object[][] getTree() {
 		try {
-			MapIndexedArrayListTree<String> arrayListTree = new MapIndexedArrayListTree<String>();
-			arrayListTree.add("Root1");
-			arrayListTree.add("Root1", "C1");
-			arrayListTree.add("Root1", "C2");
-			arrayListTree.add("C1", "C1-1");
-			arrayListTree.add("C1", "C1-2");
-			arrayListTree.add("C1", "C1-3");
-			arrayListTree.add("C2", "C2-1");
-			arrayListTree.add("C2", "C2-2");
-			arrayListTree.add("C1-1", "C1-1-1");
-			arrayListTree.add("C1-1", "C1-1-2");
-			arrayListTree.add("C1-2", "C1-2-1");
-			arrayListTree.add("C2-1", "C2-1-1");
-			arrayListTree.add("C2-1", "C2-1-2");
-			return new Object[][]{{0, new MapIndexedArrayListTree<String>()},{1, arrayListTree}};
+			LinkedTree<String> linkedTree = new LinkedTree<String>();
+			linkedTree.add("Root1");
+			linkedTree.add("Root1", "C1");
+			linkedTree.add("Root1", "C2");
+			linkedTree.add("C1", "C1-1");
+			linkedTree.add("C1", "C1-2");
+			linkedTree.add("C1", "C1-3");
+			linkedTree.add("C2", "C2-1");
+			linkedTree.add("C2", "C2-2");
+			linkedTree.add("C1-1", "C1-1-1");
+			linkedTree.add("C1-1", "C1-1-2");
+			linkedTree.add("C1-2", "C1-2-1");
+			linkedTree.add("C2-1", "C2-1-1");
+			linkedTree.add("C2-1", "C2-1-2");
+			return new Object[][]{{0, new LinkedTree<String>()},{1, linkedTree}};
 		} catch(NodeNotFoundException e) {
 			throw new RuntimeException();
 		}
 	  }
 
   @Test(dataProvider = "getTree")
-  public void addE(int testCaseNumber, MapIndexedArrayListTree<String> tree) throws NodeNotFoundException {
+  public void addE(int testCaseNumber, LinkedTree<String> tree) throws NodeNotFoundException {
 	int initialSize = tree.size();
     Assert.assertEquals(true, tree.add("New"));
     Assert.assertEquals(initialSize, tree.size() - 1);
@@ -47,7 +60,7 @@ class MapIndexedArrayListTreeTest {
   }
 
   @Test(dataProvider = "getTree")
-  public void addEE(int testCaseNumber, MapIndexedArrayListTree<String> tree) throws NodeNotFoundException {
+  public void addEE(int testCaseNumber, LinkedTree<String> tree) throws NodeNotFoundException {
 	  int initialSize = tree.size();
 	  if(initialSize == 0) {
 		  Assert.assertEquals(true, tree.add(null, "New"));
@@ -69,7 +82,7 @@ class MapIndexedArrayListTreeTest {
   }
 
   @Test(dataProvider = "getTree")
-  public void addAllCollectionextendsE(int testCaseNumber, MapIndexedArrayListTree<String> tree) {
+  public void addAllCollectionextendsE(int testCaseNumber, LinkedTree<String> tree) {
 	int initialSize = tree.size();
 	for (String i : Arrays.asList(new String[]{"1","2","3"}))
 		tree.add(i);
@@ -80,7 +93,7 @@ class MapIndexedArrayListTreeTest {
   }
 
   @Test(dataProvider = "getTree")
-  public void addAllECollectionextendsE(int testCaseNumber, MapIndexedArrayListTree<String> tree) throws NodeNotFoundException {
+  public void addAllECollectionextendsE(int testCaseNumber, LinkedTree<String> tree) throws NodeNotFoundException {
 	  int initialSize = tree.size();
 	  if(initialSize > 0) {
 		String p = tree.leaves().get(0);
@@ -94,7 +107,7 @@ class MapIndexedArrayListTreeTest {
   }
 
   @Test(dataProvider = "getTree")
-  public void children(int testCaseNumber, MapIndexedArrayListTree<String> tree) throws NodeNotFoundException {
+  public void children(int testCaseNumber, LinkedTree<String> tree) throws NodeNotFoundException {
 	  try {
 		  tree.children(null);
 		  Assert.assertEquals(false, true);
@@ -113,13 +126,13 @@ class MapIndexedArrayListTreeTest {
   }
 
   @Test(dataProvider = "getTree")
-  public void clear(int testCaseNumber, MapIndexedArrayListTree<String> tree) {
+  public void clear(int testCaseNumber, LinkedTree<String> tree) {
 	tree.clear();
     Assert.assertEquals(0, tree.size());
   }
 
   @Test(dataProvider = "getTree")
-  public void commonAncestor(int testCaseNumber, MapIndexedArrayListTree<String> tree) throws NodeNotFoundException {
+  public void commonAncestor(int testCaseNumber, LinkedTree<String> tree) throws NodeNotFoundException {
 	for(String i: tree)
 		for(String j: tree)
 			Assert.assertNotEquals(null, tree.commonAncestor(i, j));
@@ -131,7 +144,7 @@ class MapIndexedArrayListTreeTest {
   }
 
   @Test(dataProvider = "getTree")
-  public void contains(int testCaseNumber, MapIndexedArrayListTree<String> tree) {
+  public void contains(int testCaseNumber, LinkedTree<String> tree) {
 	  Assert.assertEquals(false, tree.contains(null));
 	  Assert.assertEquals(false, tree.contains("Not present"));
 	  for(String i: tree)
@@ -139,14 +152,14 @@ class MapIndexedArrayListTreeTest {
   }
 
   @Test(dataProvider = "getTree")
-  public void containsAll(int testCaseNumber, MapIndexedArrayListTree<String> tree) {
+  public void containsAll(int testCaseNumber, LinkedTree<String> tree) {
 	  Assert.assertEquals(false, tree.containsAll(Arrays.asList(new String[]{null})));
 	  Assert.assertEquals(false, tree.containsAll(Arrays.asList(new String[]{"Not Present"})));
 	  Assert.assertEquals(true, tree.containsAll(tree.inOrderTraversal())); 
   }
 
   @Test(dataProvider = "getTree")
-  public void depth(int testCaseNumber, MapIndexedArrayListTree<String> tree) {
+  public void depth(int testCaseNumber, LinkedTree<String> tree) {
 	  if(testCaseNumber == 0)
 		  Assert.assertEquals(0, tree.depth());
 	  else if(testCaseNumber == 1) {
@@ -167,20 +180,20 @@ class MapIndexedArrayListTreeTest {
 
   
   @Test(dataProvider = "getTree")
-  public void inOrderTraversal(int testCaseNumber, MapIndexedArrayListTree<String> tree) {
-	  /*arrayListTree.add("Root1");
-		arrayListTree.add("Root1", "C1");
-		arrayListTree.add("Root1", "C2");
-		arrayListTree.add("C1", "C1-1");
-		arrayListTree.add("C1", "C1-2");
-		arrayListTree.add("C1", "C1-3");
-		arrayListTree.add("C2", "C2-1");
-		arrayListTree.add("C2", "C2-2");
-		arrayListTree.add("C1-1", "C1-1-1");
-		arrayListTree.add("C1-1", "C1-1-2");
-		arrayListTree.add("C1-2", "C1-2-1");
-		arrayListTree.add("C2-1", "C2-1-1");
-		arrayListTree.add("C2-1", "C2-1-2");*/
+  public void inOrderTraversal(int testCaseNumber, LinkedTree<String> tree) {
+	  /*linkedTree.add("Root1");
+		linkedTree.add("Root1", "C1");
+		linkedTree.add("Root1", "C2");
+		linkedTree.add("C1", "C1-1");
+		linkedTree.add("C1", "C1-2");
+		linkedTree.add("C1", "C1-3");
+		linkedTree.add("C2", "C2-1");
+		linkedTree.add("C2", "C2-2");
+		linkedTree.add("C1-1", "C1-1-1");
+		linkedTree.add("C1-1", "C1-1-2");
+		linkedTree.add("C1-2", "C1-2-1");
+		linkedTree.add("C2-1", "C2-1-1");
+		linkedTree.add("C2-1", "C2-1-2");*/
 	  switch(testCaseNumber) {
 	  case 0:
 		  Assert.assertEquals(true, tree.inOrderTraversal().isEmpty());
@@ -195,7 +208,7 @@ class MapIndexedArrayListTreeTest {
   }
   
   @Test(dataProvider = "getTree")
-  public void isAncestor(int testCaseNumber, MapIndexedArrayListTree<String> tree) throws NodeNotFoundException {
+  public void isAncestor(int testCaseNumber, LinkedTree<String> tree) throws NodeNotFoundException {
 	  if(testCaseNumber == 1) {
 		  Assert.assertEquals(true, tree.isAncestor("Root1", "C2-1-1"));
 		  Assert.assertEquals(false, tree.isAncestor("C1", "C2-1-1"));
@@ -213,7 +226,7 @@ class MapIndexedArrayListTreeTest {
   }
   
   @Test(dataProvider = "getTree")
-  public void isDescendant(int testCaseNumber, MapIndexedArrayListTree<String> tree) throws NodeNotFoundException {
+  public void isDescendant(int testCaseNumber, LinkedTree<String> tree) throws NodeNotFoundException {
 	  if(testCaseNumber == 1) {
 		  Assert.assertEquals(true, tree.isDescendant("Root1", "C2-1-1"));
 		  Assert.assertEquals(false, tree.isDescendant("C1", "C2-1-1"));
@@ -221,7 +234,7 @@ class MapIndexedArrayListTreeTest {
   }
 
   @Test(dataProvider = "getTree")
-  public void isEmpty(int testCaseNumber, MapIndexedArrayListTree<String> tree) {
+  public void isEmpty(int testCaseNumber, LinkedTree<String> tree) {
 	  switch(testCaseNumber) {
 	  	case 0:
 	  		Assert.assertEquals(true, tree.isEmpty());
@@ -239,25 +252,25 @@ class MapIndexedArrayListTreeTest {
   }
 
   @Test(dataProvider = "getTree")
-  public void leaves(int testCaseNumber, MapIndexedArrayListTree<String> tree) {
+  public void leaves(int testCaseNumber, LinkedTree<String> tree) {
 	  switch(testCaseNumber) {
 	  	case 0:
 	  		Assert.assertEquals(true, tree.leaves().isEmpty());
 	  		break;
 	  	case 1:
-	  		/*arrayListTree.add("Root1");
-			arrayListTree.add("Root1", "C1");
-			arrayListTree.add("Root1", "C2");
-			arrayListTree.add("C1", "C1-1");
-			arrayListTree.add("C1", "C1-2");
-			arrayListTree.add("C1", "C1-3");
-			arrayListTree.add("C2", "C2-1");
-			arrayListTree.add("C2", "C2-2");
-			arrayListTree.add("C1-1", "C1-1-1");
-			arrayListTree.add("C1-1", "C1-1-2");
-			arrayListTree.add("C1-2", "C1-2-1");
-			arrayListTree.add("C2-1", "C2-1-1");
-			arrayListTree.add("C2-1", "C2-1-2");*/
+	  		/*linkedTree.add("Root1");
+			linkedTree.add("Root1", "C1");
+			linkedTree.add("Root1", "C2");
+			linkedTree.add("C1", "C1-1");
+			linkedTree.add("C1", "C1-2");
+			linkedTree.add("C1", "C1-3");
+			linkedTree.add("C2", "C2-1");
+			linkedTree.add("C2", "C2-2");
+			linkedTree.add("C1-1", "C1-1-1");
+			linkedTree.add("C1-1", "C1-1-2");
+			linkedTree.add("C1-2", "C1-2-1");
+			linkedTree.add("C2-1", "C2-1-1");
+			linkedTree.add("C2-1", "C2-1-2");*/
 	  		Assert.assertEquals(tree.leaves().toArray(new String[0]), new String[]{"C1-1-1","C1-1-2","C1-2-1","C1-3","C2-1-1","C2-1-2","C2-2"});
 	  		tree.remove("C1-2-1");
 			Assert.assertEquals(true, Arrays.equals(tree.leaves().toArray(new String[0]), new String[]{"C1-1-1","C1-1-2","C1-2","C1-3","C2-1-1","C2-1-2","C2-2"}));
@@ -268,25 +281,25 @@ class MapIndexedArrayListTreeTest {
   }
   
   @Test(dataProvider = "getTree")
-  public void levelOrderTraversal(int testCaseNumber, MapIndexedArrayListTree<String> tree) {
+  public void levelOrderTraversal(int testCaseNumber, LinkedTree<String> tree) {
 	  switch(testCaseNumber) {
 	  	case 0:
 	  		Assert.assertEquals(true, tree.levelOrderTraversal().isEmpty());
 	  		break;
 	  	case 1:
-	  		/*arrayListTree.add("Root1");
-			arrayListTree.add("Root1", "C1");
-			arrayListTree.add("Root1", "C2");
-			arrayListTree.add("C1", "C1-1");
-			arrayListTree.add("C1", "C1-2");
-			arrayListTree.add("C1", "C1-3");
-			arrayListTree.add("C2", "C2-1");
-			arrayListTree.add("C2", "C2-2");
-			arrayListTree.add("C1-1", "C1-1-1");
-			arrayListTree.add("C1-1", "C1-1-2");
-			arrayListTree.add("C1-2", "C1-2-1");
-			arrayListTree.add("C2-1", "C2-1-1");
-			arrayListTree.add("C2-1", "C2-1-2");*/
+	  		/*linkedTree.add("Root1");
+			linkedTree.add("Root1", "C1");
+			linkedTree.add("Root1", "C2");
+			linkedTree.add("C1", "C1-1");
+			linkedTree.add("C1", "C1-2");
+			linkedTree.add("C1", "C1-3");
+			linkedTree.add("C2", "C2-1");
+			linkedTree.add("C2", "C2-2");
+			linkedTree.add("C1-1", "C1-1-1");
+			linkedTree.add("C1-1", "C1-1-2");
+			linkedTree.add("C1-2", "C1-2-1");
+			linkedTree.add("C2-1", "C2-1-1");
+			linkedTree.add("C2-1", "C2-1-2");*/
 	  		Assert.assertEquals(tree.levelOrderTraversal().toArray(new String[0])
 	  			, new String[]{"Root1","C1","C2","C1-1","C1-2","C1-3","C2-1","C2-2","C1-1-1","C1-1-2","C1-2-1","C2-1-1","C2-1-2"});
 	  		break;
@@ -294,7 +307,7 @@ class MapIndexedArrayListTreeTest {
   }
   
   @Test(dataProvider = "getTree")
-  public void parent(int testCaseNumber, MapIndexedArrayListTree<String> tree) throws NodeNotFoundException {
+  public void parent(int testCaseNumber, LinkedTree<String> tree) throws NodeNotFoundException {
 	  switch(testCaseNumber) {
 	  	case 0:
 	  		 try {
@@ -319,25 +332,25 @@ class MapIndexedArrayListTreeTest {
   }
 
   @Test(dataProvider = "getTree")
-  public void postOrderTraversal(int testCaseNumber, MapIndexedArrayListTree<String> tree) {
+  public void postOrderTraversal(int testCaseNumber, LinkedTree<String> tree) {
 	  switch(testCaseNumber) {
 	  	case 0:
 	  		Assert.assertEquals(true, tree.postOrderTraversal().isEmpty());
 	  		break;
 	  	case 1:
-	  		/*arrayListTree.add("Root1");
-			arrayListTree.add("Root1", "C1");
-			arrayListTree.add("Root1", "C2");
-			arrayListTree.add("C1", "C1-1");
-			arrayListTree.add("C1", "C1-2");
-			arrayListTree.add("C1", "C1-3");
-			arrayListTree.add("C2", "C2-1");
-			arrayListTree.add("C2", "C2-2");
-			arrayListTree.add("C1-1", "C1-1-1");
-			arrayListTree.add("C1-1", "C1-1-2");
-			arrayListTree.add("C1-2", "C1-2-1");
-			arrayListTree.add("C2-1", "C2-1-1");
-			arrayListTree.add("C2-1", "C2-1-2");*/
+	  		/*linkedTree.add("Root1");
+			linkedTree.add("Root1", "C1");
+			linkedTree.add("Root1", "C2");
+			linkedTree.add("C1", "C1-1");
+			linkedTree.add("C1", "C1-2");
+			linkedTree.add("C1", "C1-3");
+			linkedTree.add("C2", "C2-1");
+			linkedTree.add("C2", "C2-2");
+			linkedTree.add("C1-1", "C1-1-1");
+			linkedTree.add("C1-1", "C1-1-2");
+			linkedTree.add("C1-2", "C1-2-1");
+			linkedTree.add("C2-1", "C2-1-1");
+			linkedTree.add("C2-1", "C2-1-2");*/
 	  		Assert.assertEquals(tree.postOrderTraversal().toArray(new String[0])
 	  			, new String[]{"C1-1-1","C1-1-2","C1-1","C1-2-1","C1-2","C1-3","C1","C2-1-1","C2-1-2","C2-1","C2-2","C2","Root1"});
 	  		break;
@@ -345,32 +358,32 @@ class MapIndexedArrayListTreeTest {
   }
 
   @Test(dataProvider = "getTree")
-  public void preOrderTraversal(int testCaseNumber, MapIndexedArrayListTree<String> tree) {
+  public void preOrderTraversal(int testCaseNumber, LinkedTree<String> tree) {
 	  switch(testCaseNumber) {
 	  	case 0:
 	  		Assert.assertEquals(true, tree.preOrderTraversal().isEmpty());
 	  		break;
 	  	case 1:
-	  		/*arrayListTree.add("Root1");
-			arrayListTree.add("Root1", "C1");
-			arrayListTree.add("Root1", "C2");
-			arrayListTree.add("C1", "C1-1");
-			arrayListTree.add("C1", "C1-2");
-			arrayListTree.add("C1", "C1-3");
-			arrayListTree.add("C2", "C2-1");
-			arrayListTree.add("C2", "C2-2");
-			arrayListTree.add("C1-1", "C1-1-1");
-			arrayListTree.add("C1-1", "C1-1-2");
-			arrayListTree.add("C1-2", "C1-2-1");
-			arrayListTree.add("C2-1", "C2-1-1");
-			arrayListTree.add("C2-1", "C2-1-2");*/
+	  		/*linkedTree.add("Root1");
+			linkedTree.add("Root1", "C1");
+			linkedTree.add("Root1", "C2");
+			linkedTree.add("C1", "C1-1");
+			linkedTree.add("C1", "C1-2");
+			linkedTree.add("C1", "C1-3");
+			linkedTree.add("C2", "C2-1");
+			linkedTree.add("C2", "C2-2");
+			linkedTree.add("C1-1", "C1-1-1");
+			linkedTree.add("C1-1", "C1-1-2");
+			linkedTree.add("C1-2", "C1-2-1");
+			linkedTree.add("C2-1", "C2-1-1");
+			linkedTree.add("C2-1", "C2-1-2");*/
 	  		Assert.assertEquals(tree.preOrderTraversal().toArray(new String[0])
 	  			, new String[]{"Root1","C1","C1-1","C1-1-1","C1-1-2","C1-2","C1-2-1","C1-3","C2","C2-1","C2-1-1","C2-1-2","C2-2"});
 	  		break;
 	  }
   }
   @Test(dataProvider = "getTree")
-  public void remove(int testCaseNumber, MapIndexedArrayListTree<String> tree) {
+  public void remove(int testCaseNumber, LinkedTree<String> tree) {
 	  switch(testCaseNumber) {
 	  	case 0:
 	  		try {
@@ -382,19 +395,19 @@ class MapIndexedArrayListTreeTest {
 	  		Assert.assertEquals(false, tree.remove("Not present"));
 	  		break;
 	  	case 1:
-	  		/*arrayListTree.add("Root1");
-			arrayListTree.add("Root1", "C1");
-			arrayListTree.add("Root1", "C2");
-			arrayListTree.add("C1", "C1-1");
-			arrayListTree.add("C1", "C1-2");
-			arrayListTree.add("C1", "C1-3");
-			arrayListTree.add("C2", "C2-1");
-			arrayListTree.add("C2", "C2-2");
-			arrayListTree.add("C1-1", "C1-1-1");
-			arrayListTree.add("C1-1", "C1-1-2");
-			arrayListTree.add("C1-2", "C1-2-1");
-			arrayListTree.add("C2-1", "C2-1-1");
-			arrayListTree.add("C2-1", "C2-1-2");*/
+	  		/*linkedTree.add("Root1");
+			linkedTree.add("Root1", "C1");
+			linkedTree.add("Root1", "C2");
+			linkedTree.add("C1", "C1-1");
+			linkedTree.add("C1", "C1-2");
+			linkedTree.add("C1", "C1-3");
+			linkedTree.add("C2", "C2-1");
+			linkedTree.add("C2", "C2-2");
+			linkedTree.add("C1-1", "C1-1-1");
+			linkedTree.add("C1-1", "C1-1-2");
+			linkedTree.add("C1-2", "C1-2-1");
+			linkedTree.add("C2-1", "C2-1-1");
+			linkedTree.add("C2-1", "C2-1-2");*/
 	  		Assert.assertEquals(false, tree.remove("Not present"));
 	  		Assert.assertEquals(true, tree.remove("C1-1-1"));
 	  		Assert.assertEquals(tree.preOrderTraversal().toArray(new String[0])
@@ -406,25 +419,25 @@ class MapIndexedArrayListTreeTest {
 	  }
   }
   @Test(dataProvider = "getTree")
-  public void removeAll(int testCaseNumber, MapIndexedArrayListTree<String> tree) {
+  public void removeAll(int testCaseNumber, LinkedTree<String> tree) {
 	  switch(testCaseNumber) {
 	  	case 0:
 	  		Assert.assertEquals(true, tree.preOrderTraversal().isEmpty());
 	  		break;
 	  	case 1:
-	  		/*arrayListTree.add("Root1");
-			arrayListTree.add("Root1", "C1");
-			arrayListTree.add("Root1", "C2");
-			arrayListTree.add("C1", "C1-1");
-			arrayListTree.add("C1", "C1-2");
-			arrayListTree.add("C1", "C1-3");
-			arrayListTree.add("C2", "C2-1");
-			arrayListTree.add("C2", "C2-2");
-			arrayListTree.add("C1-1", "C1-1-1");
-			arrayListTree.add("C1-1", "C1-1-2");
-			arrayListTree.add("C1-2", "C1-2-1");
-			arrayListTree.add("C2-1", "C2-1-1");
-			arrayListTree.add("C2-1", "C2-1-2");*/
+	  		/*linkedTree.add("Root1");
+			linkedTree.add("Root1", "C1");
+			linkedTree.add("Root1", "C2");
+			linkedTree.add("C1", "C1-1");
+			linkedTree.add("C1", "C1-2");
+			linkedTree.add("C1", "C1-3");
+			linkedTree.add("C2", "C2-1");
+			linkedTree.add("C2", "C2-2");
+			linkedTree.add("C1-1", "C1-1-1");
+			linkedTree.add("C1-1", "C1-1-2");
+			linkedTree.add("C1-2", "C1-2-1");
+			linkedTree.add("C2-1", "C2-1-1");
+			linkedTree.add("C2-1", "C2-1-2");*/
 	  		Assert.assertEquals(tree.preOrderTraversal().toArray(new String[0])
 	  			, new String[]{"Root1","C1","C1-1","C1-1-1","C1-1-2","C1-2","C1-2-1","C1-3","C2","C2-1","C2-1-1","C2-1-2","C2-2"});
 	  		break;
@@ -432,7 +445,7 @@ class MapIndexedArrayListTreeTest {
   }
 
   @Test(dataProvider = "getTree")
-  public void retainAll(int testCaseNumber, MapIndexedArrayListTree<String> tree) {
+  public void retainAll(int testCaseNumber, LinkedTree<String> tree) {
    try {
 	   tree.retainAll(Arrays.asList(new String[]{""}));
    } catch (UnsupportedOperationException e) {
@@ -441,7 +454,7 @@ class MapIndexedArrayListTreeTest {
   }
 
   @Test(dataProvider = "getTree")
-  public void root(int testCaseNumber, MapIndexedArrayListTree<String> tree) {
+  public void root(int testCaseNumber, LinkedTree<String> tree) {
 	  switch(testCaseNumber) {
 	  	case 0:
 	  		Assert.assertEquals(null, tree.root());
@@ -453,7 +466,7 @@ class MapIndexedArrayListTreeTest {
   }
 
   @Test(dataProvider = "getTree")
-  public void siblings(int testCaseNumber, MapIndexedArrayListTree<String> tree) throws NodeNotFoundException {
+  public void siblings(int testCaseNumber, LinkedTree<String> tree) throws NodeNotFoundException {
 	  switch(testCaseNumber) {
 	  	case 0:
 	  		try {
@@ -470,19 +483,19 @@ class MapIndexedArrayListTreeTest {
 	  	    }
 	  		break;
 	  	case 1:
-	  		/*arrayListTree.add("Root1");
-			arrayListTree.add("Root1", "C1");
-			arrayListTree.add("Root1", "C2");
-			arrayListTree.add("C1", "C1-1");
-			arrayListTree.add("C1", "C1-2");
-			arrayListTree.add("C1", "C1-3");
-			arrayListTree.add("C2", "C2-1");
-			arrayListTree.add("C2", "C2-2");
-			arrayListTree.add("C1-1", "C1-1-1");
-			arrayListTree.add("C1-1", "C1-1-2");
-			arrayListTree.add("C1-2", "C1-2-1");
-			arrayListTree.add("C2-1", "C2-1-1");
-			arrayListTree.add("C2-1", "C2-1-2");*/
+	  		/*linkedTree.add("Root1");
+			linkedTree.add("Root1", "C1");
+			linkedTree.add("Root1", "C2");
+			linkedTree.add("C1", "C1-1");
+			linkedTree.add("C1", "C1-2");
+			linkedTree.add("C1", "C1-3");
+			linkedTree.add("C2", "C2-1");
+			linkedTree.add("C2", "C2-2");
+			linkedTree.add("C1-1", "C1-1-1");
+			linkedTree.add("C1-1", "C1-1-2");
+			linkedTree.add("C1-2", "C1-2-1");
+			linkedTree.add("C2-1", "C2-1-1");
+			linkedTree.add("C2-1", "C2-1-2");*/
 	  		Assert.assertEquals(tree.siblings("Root1").toArray(new String[0]), new String[]{});
 	  		Assert.assertEquals(tree.siblings("C1").toArray(new String[0]), new String[]{"C2"});
 	  		Assert.assertEquals(tree.siblings("C1-1").toArray(new String[0]), new String[]{"C1-2","C1-3"});
@@ -491,7 +504,7 @@ class MapIndexedArrayListTreeTest {
   }
 
   @Test(dataProvider = "getTree")
-  public void size(int testCaseNumber, MapIndexedArrayListTree<String> tree) {
+  public void size(int testCaseNumber, LinkedTree<String> tree) {
 	  switch(testCaseNumber) {
 	  	case 0:
 	  		Assert.assertEquals(0, tree.size());
@@ -509,7 +522,7 @@ class MapIndexedArrayListTreeTest {
   }
 
   @Test(dataProvider = "getTree")
-  public void toArray(int testCaseNumber, MapIndexedArrayListTree<String> tree) {
+  public void toArray(int testCaseNumber, LinkedTree<String> tree) {
 	  switch(testCaseNumber) {
 	  	case 0:
 	  		Assert.assertEquals(new String[]{}, tree.toArray());
@@ -521,7 +534,7 @@ class MapIndexedArrayListTreeTest {
   }
 
   @Test(dataProvider = "getTree")
-  public void toArrayT(int testCaseNumber, MapIndexedArrayListTree<String> tree) {
+  public void toArrayT(int testCaseNumber, LinkedTree<String> tree) {
 	  switch(testCaseNumber) {
 	  	case 0:
 	  		Assert.assertEquals(new String[]{}, tree.toArray(new String[0]));
@@ -533,19 +546,19 @@ class MapIndexedArrayListTreeTest {
 	  }
   }
   @Test(dataProvider = "getTree")
-  public void equals(int testCaseNumber, MapIndexedArrayListTree<String> tree) throws NodeNotFoundException {
+  public void equals(int testCaseNumber, LinkedTree<String> tree) throws NodeNotFoundException {
 	  switch(testCaseNumber) {
 	  	case 0:
-	  		MapIndexedArrayListTree<String> arrayListTree = new MapIndexedArrayListTree<String>();
-	  		Assert.assertEquals(true, tree.equals(arrayListTree));
-	  		arrayListTree.add("Root2");
-	  		Assert.assertEquals(false, tree.equals(arrayListTree));
+	  		LinkedTree<String> linkedTree = new LinkedTree<String>();
+	  		Assert.assertEquals(true, tree.equals(linkedTree));
+	  		linkedTree.add("Root2");
+	  		Assert.assertEquals(false, tree.equals(linkedTree));
 	  		break;
 	  	case 1:
 	  		@SuppressWarnings("unchecked")
-			MapIndexedArrayListTree<String> clone = (MapIndexedArrayListTree<String>) tree.clone();
+			LinkedTree<String> clone = (LinkedTree<String>) tree.clone();
 	  		@SuppressWarnings("unchecked")
-			MapIndexedArrayListTree<String> clone2 = (MapIndexedArrayListTree<String>) tree.clone();
+			LinkedTree<String> clone2 = (LinkedTree<String>) tree.clone();
 	  		Assert.assertEquals(true, tree.equals(clone));
 	  		clone.remove("C1-1-1");
 	  		Assert.assertEquals(false, tree.equals(clone));

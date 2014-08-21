@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Gaurav Saxena
+ * Copyright 2014 Gaurav Saxena
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -28,7 +28,7 @@ import java.util.List;
  *
  * @param <E>
  */
-public class MapIndexedArrayListTree<E> implements Tree<E>, Cloneable {
+class MapIndexedArrayListTree<E> implements Tree<E>, Cloneable {
 	HashMap<E, Integer> map = new HashMap<>();
 	private ArrayList<E> nodeList = new ArrayList<E>();
 	private ArrayList<Integer> parentList = new ArrayList<Integer>();

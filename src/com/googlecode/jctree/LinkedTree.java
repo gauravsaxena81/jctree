@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Gaurav Saxena
+ * Copyright 2014 Gaurav Saxena
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -56,7 +56,7 @@ public class LinkedTree<E> implements Tree<E>, Cloneable{
 				depth++;
 				return true;
 			} else
-				throw new NullPointerException("parent cannot be null except for root element");
+				throw new IllegalArgumentException("parent cannot be null except for root element");
 		}
 		Entry<E> parentEntry = getNode(parent);
 		Entry<E> childEntry = getNode(child);
@@ -114,11 +114,15 @@ public class LinkedTree<E> implements Tree<E>, Cloneable{
 	@Override
 	public List<E> children(E e) throws NodeNotFoundException {
 		checkNode(e);
-		List<Entry<E>> childrenEntries = getNode(e).children;
-		ArrayList<E> children = new ArrayList<E>();
-		for(Entry<E> i : childrenEntries)
-			children.add(i.element);
-		return children;
+		Entry<E> node = getNode(e);
+		if(node != null) {
+			List<Entry<E>> childrenEntries = node.children;
+			ArrayList<E> children = new ArrayList<E>();
+			for(Entry<E> i : childrenEntries)
+				children.add(i.element);
+			return children;
+		} else
+			throw new NodeNotFoundException("No node was found for object");
 	}
 	@Override
 	public void clear() {
@@ -434,6 +438,19 @@ public class LinkedTree<E> implements Tree<E>, Cloneable{
 	@Override
 	public String toString() {
 		return getCurrentList().toString();
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean equals(Object o) {
+		if(o != null && o instanceof LinkedTree) {
+			try {
+				return new TreeHelper().isEqual((LinkedTree<E>) o, this, ((LinkedTree<E>) o).root(), root());
+			} catch (NodeNotFoundException e) {
+				e.printStackTrace();
+				return false;
+			}
+		} else
+			return false;
 	}
 	private static class Entry<E> {
 		E element;

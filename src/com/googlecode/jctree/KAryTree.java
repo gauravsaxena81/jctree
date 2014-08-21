@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Gaurav Saxena
+ * Copyright 2014 Gaurav Saxena
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,6 +13,7 @@
  */
 package com.googlecode.jctree;
 
+import java.util.Collection;
 import java.util.List;
 
 
@@ -24,7 +25,27 @@ import java.util.List;
 public class KAryTree<E> extends ArrayListTree<E> {
 	private int k;
 	public KAryTree(int k) {
-		this.k = k;
+		if(k <= 0)
+			throw new IllegalArgumentException("Number of children cannot be less than 1");
+		else
+			this.k = k;
+	}
+	@Override
+	public boolean add(E child) {
+		int numberOfChildrenAllowed = 0;
+		if(super.isEmpty())
+			numberOfChildrenAllowed = k + 1;
+		else {
+			try {
+				numberOfChildrenAllowed = k - super.children(super.root()).size();
+			} catch (NodeNotFoundException e) {
+				//not possible
+			}
+		}
+		if(numberOfChildrenAllowed <= 0)
+			throw new IllegalArgumentException("Size of collection is more than tree can hold");
+		else
+			return super.add(child);
 	}
 	@Override
 	public boolean add(E parent, E child) throws NodeNotFoundException {
@@ -34,6 +55,32 @@ public class KAryTree<E> extends ArrayListTree<E> {
 			return super.add(parent, child);
 		else
 			throw new IndexOutOfBoundsException("Cannot add more than " + k +" children to a parent");
+	}
+	@Override
+	public boolean addAll(Collection<? extends E> c) {
+		int numberOfChildrenAllowed = 0;
+		if(super.isEmpty())
+			numberOfChildrenAllowed = k + 1;
+		else {
+			try {
+				numberOfChildrenAllowed = k - super.children(super.root()).size();
+			} catch (NodeNotFoundException e) {
+				//not possible
+			}
+		}
+		if(c.size() > numberOfChildrenAllowed)
+			throw new IllegalArgumentException("Size of collection is more than tree can hold");
+		else
+			return super.addAll(c);
+	}
+	public boolean addAll(E parent, Collection<? extends E> c) {
+		int numberOfChildrenAllowed = k;
+		if(parent == null && super.isEmpty())
+			numberOfChildrenAllowed++;
+		if(c.size() > numberOfChildrenAllowed)
+			throw new IllegalArgumentException("Size of collection is more than tree can hold");
+		else
+			return super.addAll(parent, c);
 	}
 	/**
 	 * @param parent the parent node
