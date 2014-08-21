@@ -1,10 +1,31 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>jc-tree</groupId>
-  <artifactId>jc-tree</artifactId>
+  <groupId>com.googlecode.jctree</groupId>
+  <artifactId>jctree</artifactId>
   <version>1.2.2</version>
-  <name>jc-tree</name>
+  <packaging>jar</packaging>
+  <name>jctree</name>
   <description>Collection based tree implementations</description>
+  <url>http://jctree.googlecode.com</url>
+  <licenses>
+	  <license>
+	    <name>The Apache License, Version 2.0</name>
+	    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+	  </license>
+  </licenses>
+  <developers>
+    <developer>
+      <name>Gaurav Saxena</name>
+      <email>gsaxena81@gmail.com</email>
+      <organization>Open Source</organization>
+      <organizationUrl>https://code.google.com/u/107636290736533687862/</organizationUrl>
+    </developer>
+  </developers>
+  <scm>
+	  <connection>scm:git:https://code.google.com/p/jctree/</connection>
+	  <developerConnection>scm:git:code.google.com/p/jctree/</developerConnection>
+	  <url>http://code.google.com/p/jctree/source/browse</url>
+  </scm>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <testSourceDirectory>test</testSourceDirectory>
@@ -24,6 +45,30 @@
           <source>1.7</source>
           <target>1.7</target>
         </configuration>
+      </plugin>
+      <plugin>
+		  <groupId>org.apache.maven.plugins</groupId>
+		  <artifactId>maven-source-plugin</artifactId>
+		  <executions>
+		    <execution>
+		      <id>attach-sources</id>
+		      <goals>
+		        <goal>jar</goal>
+		      </goals>
+		    </execution>
+		  </executions>
+      </plugin>
+      <plugin>
+		  <groupId>org.apache.maven.plugins</groupId>
+		  <artifactId>maven-javadoc-plugin</artifactId>
+		  <executions>
+		    <execution>
+		      <id>attach-javadocs</id>
+		      <goals>
+		        <goal>jar</goal>
+		      </goals>
+		    </execution>
+		  </executions>
       </plugin>
     </plugins>
   </build>
