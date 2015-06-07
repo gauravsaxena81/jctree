@@ -18,9 +18,8 @@ You can also download the jar and other artifacts from [https://oss.sonatype.org
 
 ### Links
   1. [Jctree Forum](https://groups.google.com/forum/#!forum/jctree)
-  1. [Javadoc](https://jctree.googlecode.com/git/doc/index.html)
-  1. [Getting Started](http://code.google.com/p/jctree/wiki/GettingStarted)
-  1. http://code.google.com/p/gwt-structs/wiki/ClientJcTree GWT implementation of jctree in [gwt-structs](https://gwt-structs.googlecode.com/files/gwt-structs-0.1.0.1.jar)
+  1. [Javadoc](http://htmlpreview.github.io/?https://github.com/gauravsaxena81/jctree/blob/master/doc/index.html)
+  1. [Getting Started](https://github.com/gauravsaxena81/jctree/blob/master/GettingStarted)
 
 ### Types of trees (Interfaces)
 There are currently two types of implementations of the trees. The **Tree** type of implementation allows variable number of children to each node.
