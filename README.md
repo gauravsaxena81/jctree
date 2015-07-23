@@ -19,7 +19,7 @@ You can also download the jar and other artifacts from [https://oss.sonatype.org
 ### Links
   1. [Jctree Forum](https://groups.google.com/forum/#!forum/jctree)
   1. [Javadoc](http://htmlpreview.github.io/?https://github.com/gauravsaxena81/jctree/blob/master/doc/index.html)
-  1. [Getting Started](https://github.com/gauravsaxena81/jctree/blob/master/GettingStarted.md)
+  1. [Getting Started](https://github.com/gauravsaxena81/jctree/wiki/Getting-Started)
 
 ### Types of trees (Interfaces)
 There are currently two types of implementations of the trees. The **Tree** type of implementation allows variable number of children to each node.
