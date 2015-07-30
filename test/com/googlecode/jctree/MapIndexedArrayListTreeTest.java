@@ -6,11 +6,8 @@ import java.util.List;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import com.googlecode.jctree.MapIndexedArrayListTree;
-import com.googlecode.jctree.NodeNotFoundException;
-
-class MapIndexedArrayListTreeTest {
+@Test(enabled=false)
+public class MapIndexedArrayListTreeTest {
 	@DataProvider
 	public Object[][] getTree() {
 		try {

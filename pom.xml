@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.googlecode.jctree</groupId>
   <artifactId>jctree</artifactId>
-  <version>1.2.2</version>
+  <version>2.0.1</version>
   <packaging>jar</packaging>
   <name>jctree</name>
   <description>Collection based tree implementations</description>
@@ -26,6 +26,12 @@
 	  <developerConnection>scm:git:code.google.com/p/jctree/</developerConnection>
 	  <url>http://code.google.com/p/jctree/source/browse</url>
   </scm>
+  <distributionManagement>
+	  <snapshotRepository>
+	    <id>ossrh</id>
+	    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+	  </snapshotRepository>
+  </distributionManagement>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <testSourceDirectory>test</testSourceDirectory>
@@ -38,6 +44,17 @@
       </resource>
     </resources>
     <plugins>
+      <plugin>
+	      <groupId>org.sonatype.plugins</groupId>
+	      <artifactId>nexus-staging-maven-plugin</artifactId>
+	      <version>1.6.3</version>
+	      <extensions>true</extensions>
+	      <configuration>
+	        <serverId>ossrh</serverId>
+	        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+	        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+	      </configuration>
+	  </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.3.2</version>
@@ -70,6 +87,31 @@
 		    </execution>
 		  </executions>
       </plugin>
+      <plugin>
+	      <groupId>org.apache.maven.plugins</groupId>
+	      <artifactId>maven-gpg-plugin</artifactId>
+	      <version>1.5</version>
+	      <executions>
+	        <execution>
+	          <id>sign-artifacts</id>
+	          <phase>verify</phase>
+	          <goals>
+	            <goal>sign</goal>
+	          </goals>
+	        </execution>
+	      </executions>
+	  </plugin>
+	  <plugin>
+		  <groupId>org.sonatype.plugins</groupId>
+		  <artifactId>nexus-staging-maven-plugin</artifactId>
+		  <version>1.6.3</version>
+		  <extensions>true</extensions>
+		  <configuration>
+		     <serverId>ossrh</serverId>
+		     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+		     <autoReleaseAfterClose>true</autoReleaseAfterClose>
+		  </configuration>
+	  </plugin>
     </plugins>
   </build>
   <dependencies>

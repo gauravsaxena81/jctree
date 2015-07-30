@@ -356,18 +356,6 @@ public class BinaryRedBlackTreeTest {
 	  		Assert.assertEquals(true, tree.preOrderTraversal().isEmpty());
 	  		break;
 	  	case 1:
-	  		/*BinaryRedBlackTree.add("C6");
-			BinaryRedBlackTree.add("C6", "C1");
-			BinaryRedBlackTree.add("C6", "C2");
-			BinaryRedBlackTree.add("C1", "C1-1");
-			BinaryRedBlackTree.add("C1", "C1-2");
-			BinaryRedBlackTree.add("C2", "C2-1");
-			BinaryRedBlackTree.add("C2", "C2-2");
-			BinaryRedBlackTree.add("C1-1", "C1-1-1");
-			BinaryRedBlackTree.add("C1-1", "C1-1-2");
-			BinaryRedBlackTree.add("C1-2", "C1-2-1");
-			BinaryRedBlackTree.add("C2-1", "C2-1-1");
-			BinaryRedBlackTree.add("C2-1", "C2-1-2");*/
 	  		Assert.assertEquals(tree.preOrderTraversal().toArray(new String[0])
 	  			, new String[]{"C6","C3","C1","C2","C4","C5","C9","C7","C8","CB","CA","CC"});
 	  		break;
@@ -463,18 +451,6 @@ public class BinaryRedBlackTreeTest {
 	  	    }
 	  		break;
 	  	case 1:
-	  		/*BinaryRedBlackTree.add("C6");
-			BinaryRedBlackTree.add("C6", "C1");
-			BinaryRedBlackTree.add("C6", "C2");
-			BinaryRedBlackTree.add("C1", "C1-1");
-			BinaryRedBlackTree.add("C1", "C1-2");
-			BinaryRedBlackTree.add("C2", "C2-1");
-			BinaryRedBlackTree.add("C2", "C2-2");
-			BinaryRedBlackTree.add("C1-1", "C1-1-1");
-			BinaryRedBlackTree.add("C1-1", "C1-1-2");
-			BinaryRedBlackTree.add("C1-2", "C1-2-1");
-			BinaryRedBlackTree.add("C2-1", "C2-1-1");
-			BinaryRedBlackTree.add("C2-1", "C2-1-2");*/
 	  		Assert.assertEquals(tree.siblings("C6").toArray(new String[0]), new String[]{});
 	  		Assert.assertEquals(tree.siblings("C3").toArray(new String[0]), new String[]{"C9"});
 	  		Assert.assertEquals(tree.siblings("C9").toArray(new String[0]), new String[]{"C3"});
@@ -572,7 +548,7 @@ public class BinaryRedBlackTreeTest {
   @Test(dataProvider = "getTree")
   public void right(int testCaseNumber, BinaryRedBlackTree<String> tree) throws NodeNotFoundException {
 	  switch(testCaseNumber) {
-	  	case 1:
+	  	case 0:
 	  		try {
 	  			tree.right(null);
 	  			Assert.assertEquals(false, true);
@@ -586,10 +562,11 @@ public class BinaryRedBlackTreeTest {
 	  			//passed
 	  		}
 	  		break;
-	  	case 2:
+	  	case 1:
 	  		Assert.assertEquals(tree.right("C6"), "C9");
 	  		Assert.assertEquals(tree.right("C3"), "C4");
-	  		Assert.assertNull(tree.right("C7"));
+	  		Assert.assertEquals(tree.right("C7"), "C8");
+	  		Assert.assertNull(tree.right("C8"));
 	  		Assert.assertNull(tree.right("C2"));
 	  		break;
 	  }
@@ -597,7 +574,7 @@ public class BinaryRedBlackTreeTest {
   @Test(dataProvider = "getTree")
   public void successor(int testCaseNumber, BinaryRedBlackTree<String> tree) throws NodeNotFoundException {
 	  switch(testCaseNumber) {
-	  	case 1:
+	  	case 0:
 	  		try {
 	  			tree.predecessor(null);
 	  			Assert.assertEquals(false, true);
@@ -611,7 +588,7 @@ public class BinaryRedBlackTreeTest {
 	  			//passed
 	  		}
 	  		break;
-	  	case 2:
+	  	case 1:
 	  		Assert.assertEquals(tree.successor("C5"), "C6");
 	  		Assert.assertEquals(tree.successor("C2"), "C3");
 	  		Assert.assertEquals(tree.successor("C4"), "C5");
@@ -622,7 +599,7 @@ public class BinaryRedBlackTreeTest {
   @Test(dataProvider = "getTree")
   public void predecessor(int testCaseNumber, BinaryRedBlackTree<String> tree) throws NodeNotFoundException {
 	  switch(testCaseNumber) {
-	  	case 1:
+	  	case 0:
 	  		try {
 	  			tree.predecessor(null);
 	  			Assert.assertEquals(false, true);
@@ -636,7 +613,7 @@ public class BinaryRedBlackTreeTest {
 	  			//passed
 	  		}
 	  		break;
-	  	case 2:
+	  	case 1:
 	  		Assert.assertEquals(tree.predecessor("C6"), "C5");
 	  		Assert.assertEquals(tree.predecessor("C3"), "C2");
 	  		Assert.assertEquals(tree.predecessor("C5"), "C4");

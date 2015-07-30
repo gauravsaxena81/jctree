@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * 
  * @author Gaurav Saxena
- * ImplementsSelf-balancing red black tree as given in <a href='http://en.wikipedia.org/wiki/Red%E2%80%93black_tree'>Wikipedia</a>
+ * Implements Self-balancing red black tree as given in <a href='http://en.wikipedia.org/wiki/Red%E2%80%93black_tree'>Wikipedia</a>
  * @param <E>
  */
 public class BinaryRedBlackTree<E extends Comparable<E>> implements SortedTree<E>, Cloneable {
@@ -387,16 +387,23 @@ public class BinaryRedBlackTree<E extends Comparable<E>> implements SortedTree<E
 			return successorNode(node(root, value)).value;
 	}
 	private Node successorNode(Node node) throws NodeNotFoundException {
-		Node right = node.right;
+		BinaryRedBlackTree<E>.Node right = node.right;
 		if(right != null) {
-			node = right;
-			while(node.left != null)
-				node = node.left;
-			return node;
+			while(right.left != null) {
+				right = right.left;
+			}
+			return right;
 		} else {
-			while(!node.parent.right.value.equals(node.value))
-				node = node.parent;
-			return node;
+			BinaryRedBlackTree<E>.Node parent = node.parent;
+			while(parent != null) {
+				if(parent.left == node) { //I am right node
+					return parent;
+				} else { //I am left node
+					node = parent;
+					parent = parent.parent;
+				}
+			}
+			return null;//I am left most node, so there is no predecessor
 		}
 	}
 	@Override
@@ -408,16 +415,23 @@ public class BinaryRedBlackTree<E extends Comparable<E>> implements SortedTree<E
 			return predecessorNode(node(root, value)).value;
 	}
 	private Node predecessorNode(Node node) throws NodeNotFoundException {
-		Node left = node.left;
+		BinaryRedBlackTree<E>.Node left = node.left;
 		if(left != null) {
-			node = left;
-			while(node.right != null)
-				node = node.right;
-			return node;
+			while(left.right != null) {
+				left = left.right;
+			}
+			return left;
 		} else {
-			while(!node.parent.left.value.equals(node.value))
-				node = node.parent;
-			return node;
+			BinaryRedBlackTree<E>.Node parent = node.parent;
+			while(parent != null) {
+				if(parent.right == node) { //I am right node
+					return parent;
+				} else { //I am left node
+					node = parent;
+					parent = parent.parent;
+				}
+			}
+			return null;//I am left most node, so there is no predecessor
 		}
 	}
 	private boolean remove(Node node) {
