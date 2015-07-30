@@ -560,7 +560,7 @@ public class BinarySearchTreeTest {
   @Test(dataProvider = "getTree")
   public void right(int testCaseNumber, BinarySearchTree<String> tree) throws NodeNotFoundException {
 	  switch(testCaseNumber) {
-	  	case 1:
+	  	case 0:
 	  		try {
 	  			tree.right(null);
 	  			Assert.assertEquals(false, true);
@@ -574,18 +574,19 @@ public class BinarySearchTreeTest {
 	  			//passed
 	  		}
 	  		break;
-	  	case 2:
+	  	case 1:
 	  		Assert.assertEquals(tree.right("C6"), "C9");
 	  		Assert.assertEquals(tree.right("C3"), "C4");
 	  		Assert.assertNull(tree.right("C7"));
 	  		Assert.assertNull(tree.right("C2"));
+	  		Assert.assertNull(tree.right("CC"));
 	  		break;
 	  }
   }
   @Test(dataProvider = "getTree")
   public void successor(int testCaseNumber, BinarySearchTree<String> tree) throws NodeNotFoundException {
 	  switch(testCaseNumber) {
-	  	case 1:
+	  	case 0:
 	  		try {
 	  			tree.predecessor(null);
 	  			Assert.assertEquals(false, true);
@@ -599,7 +600,7 @@ public class BinarySearchTreeTest {
 	  			//passed
 	  		}
 	  		break;
-	  	case 2:
+	  	case 1:
 	  		Assert.assertEquals(tree.successor("C5"), "C6");
 	  		Assert.assertEquals(tree.successor("C2"), "C3");
 	  		Assert.assertEquals(tree.successor("C4"), "C5");
@@ -610,7 +611,7 @@ public class BinarySearchTreeTest {
   @Test(dataProvider = "getTree")
   public void predecessor(int testCaseNumber, BinarySearchTree<String> tree) throws NodeNotFoundException {
 	  switch(testCaseNumber) {
-	  	case 1:
+	  	case 0:
 	  		try {
 	  			tree.predecessor(null);
 	  			Assert.assertEquals(false, true);
@@ -624,7 +625,7 @@ public class BinarySearchTreeTest {
 	  			//passed
 	  		}
 	  		break;
-	  	case 2:
+	  	case 1:
 	  		Assert.assertEquals(tree.predecessor("C6"), "C5");
 	  		Assert.assertEquals(tree.predecessor("C3"), "C2");
 	  		Assert.assertEquals(tree.predecessor("C5"), "C4");

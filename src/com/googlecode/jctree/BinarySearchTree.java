@@ -14,10 +14,13 @@
 package com.googlecode.jctree;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.testng.annotations.Test;
 
 /**
  * Implements traditional BST as left-right-parent links of a node. This gives log(n) complexity for operations unlike {@link ArrayListBinarySearchTree}.
@@ -543,11 +546,12 @@ public class BinarySearchTree<E extends Comparable<E>> implements SortedTree<E>,
 		else {
 			Node left = node(root, parent).left;
 			if(left != null)
-				return node(root, parent).left.value;
+				return left.value;
 			else
 				return null;
 		}
 	}
+	
 	/**
 	 * @param parent
 	 * @return the right child if present, or null otherwise
@@ -559,7 +563,10 @@ public class BinarySearchTree<E extends Comparable<E>> implements SortedTree<E>,
 			throw new NodeNotFoundException("No node was found for object");
 		else {
 			Node right = node(root, parent).right;
-			return right.value;
+			if(right != null)
+				return right.value;
+			else
+				return null;
 		}
 	}
 	@Override
