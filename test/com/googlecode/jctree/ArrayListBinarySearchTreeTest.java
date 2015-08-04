@@ -39,6 +39,7 @@ public class ArrayListBinarySearchTreeTest {
 		binarySearchTree.add("C8");
 		binarySearchTree.add("CA");
 		binarySearchTree.add("CC");
+		binarySearchTree.add("C65");
 		/*
 								     C6
 							   ______|______
@@ -47,9 +48,9 @@ public class ArrayListBinarySearchTreeTest {
 					    ______|__       ____|______
 					   |	     |     |           |
 					  C1        C4      C7          CB
-			           |____     |__    |__      ___|___
-			                |       |      |    |       |
-			                C2      C5     C8   CA      CC
+			           |____     |__   _|__      ___|___
+			                |       | |    |    |       |
+			                C2     C5 C65  C8   CA      CC
 		 */
 		return new Object[][]{{0, new ArrayListBinarySearchTree<String>()},{1, binarySearchTree}};
 	  }
@@ -180,7 +181,7 @@ public class ArrayListBinarySearchTreeTest {
 	  	  break;
 	  case 1:
 		  Assert.assertEquals(true, Arrays.equals(tree.inOrderTraversal().toArray(new String[0])
-			, new String[]{"C1","C2","C3","C4","C5","C6","C7","C8","C9","CA","CB","CC"}));
+			, new String[]{"C1","C2","C3","C4","C5","C6","C65", "C7","C8","C9","CA","CB","CC"}));
 		  break;
 	  }
   }
@@ -266,21 +267,9 @@ public class ArrayListBinarySearchTreeTest {
 	  		Assert.assertEquals(true, tree.leaves().isEmpty());
 	  		break;
 	  	case 1:
-	  		/*BinarySearchTree.add("C6");
-			BinarySearchTree.add("C3");
-			BinarySearchTree.add("C9");
-			BinarySearchTree.add("C1");
-			BinarySearchTree.add("C4");
-			BinarySearchTree.add("C7");
-			BinarySearchTree.add("CB");
-			BinarySearchTree.add("C2");
-			BinarySearchTree.add("C5");
-			BinarySearchTree.add("C8");
-			BinarySearchTree.add("CA");
-			BinarySearchTree.add("CC");*/
-	  		Assert.assertEquals(tree.leaves().toArray(new String[0]), new String[]{"C2","C5","C8","CA","CC"});
+	  		Assert.assertEquals(tree.leaves().toArray(new String[0]), new String[]{"C2","C5","C65", "C8","CA","CC"});
 	  		tree.remove("C2");
-			Assert.assertEquals(true, Arrays.equals(tree.leaves().toArray(new String[0]), new String[]{"C1", "C5","C8","CA","CC"}));
+			Assert.assertEquals(tree.leaves().toArray(new String[0]), new String[]{"C1", "C5","C65", "C8","CA","CC"});
 	  		break;
 	  }
   }
@@ -305,7 +294,7 @@ public class ArrayListBinarySearchTreeTest {
 			BinarySearchTree.add("C2-1", "C2-1-1");
 			BinarySearchTree.add("C2-1", "C2-1-2");*/
 	  		Assert.assertEquals(tree.levelOrderTraversal().toArray(new String[0])
-	  			, new String[]{"C6","C3","C9","C1","C4","C7","CB","C2","C5","C8","CA","CC"});
+	  			, new String[]{"C6","C3","C9","C1","C4","C7","CB","C2","C5","C65", "C8","CA","CC"});
 	  		break;
 	  }
   }
@@ -316,13 +305,13 @@ public class ArrayListBinarySearchTreeTest {
 	  	case 0:
 	  		 try {
 	  			  tree.parent(null);
-	  			  Assert.assertEquals(false, true);
+	  			  Assert.assertTrue(false);
 	  		  } catch (IllegalArgumentException e) {
 	  			  //passed
 	  		  }
 	  		  try {
 	  			  tree.parent("Not present");
-	  			  Assert.assertEquals(false, true);
+	  			  Assert.assertTrue(false);
 	  		  } catch (NodeNotFoundException e) {
 	  			  //passed
 	  		  }
@@ -342,20 +331,8 @@ public class ArrayListBinarySearchTreeTest {
 	  		Assert.assertEquals(true, tree.postOrderTraversal().isEmpty());
 	  		break;
 	  	case 1:
-	  		/*BinarySearchTree.add("C6");
-			BinarySearchTree.add("C6", "C1");
-			BinarySearchTree.add("C6", "C2");
-			BinarySearchTree.add("C1", "C1-1");
-			BinarySearchTree.add("C1", "C1-2");
-			BinarySearchTree.add("C2", "C2-1");
-			BinarySearchTree.add("C2", "C2-2");
-			BinarySearchTree.add("C1-1", "C1-1-1");
-			BinarySearchTree.add("C1-1", "C1-1-2");
-			BinarySearchTree.add("C1-2", "C1-2-1");
-			BinarySearchTree.add("C2-1", "C2-1-1");
-			BinarySearchTree.add("C2-1", "C2-1-2");*/
 	  		Assert.assertEquals(tree.postOrderTraversal().toArray(new String[0])
-	  			, new String[]{"C2","C1","C5","C4","C3","C8","C7","CA","CC","CB","C9","C6"});
+	  			, new String[]{"C2","C1","C5","C4","C3","C65", "C8","C7","CA","CC","CB","C9","C6"});
 	  		break;
 	  }
   }
@@ -367,20 +344,8 @@ public class ArrayListBinarySearchTreeTest {
 	  		Assert.assertEquals(true, tree.preOrderTraversal().isEmpty());
 	  		break;
 	  	case 1:
-	  		/*BinarySearchTree.add("C6");
-			BinarySearchTree.add("C6", "C1");
-			BinarySearchTree.add("C6", "C2");
-			BinarySearchTree.add("C1", "C1-1");
-			BinarySearchTree.add("C1", "C1-2");
-			BinarySearchTree.add("C2", "C2-1");
-			BinarySearchTree.add("C2", "C2-2");
-			BinarySearchTree.add("C1-1", "C1-1-1");
-			BinarySearchTree.add("C1-1", "C1-1-2");
-			BinarySearchTree.add("C1-2", "C1-2-1");
-			BinarySearchTree.add("C2-1", "C2-1-1");
-			BinarySearchTree.add("C2-1", "C2-1-2");*/
 	  		Assert.assertEquals(tree.preOrderTraversal().toArray(new String[0])
-	  			, new String[]{"C6","C3","C1","C2","C4","C5","C9","C7","C8","CB","CA","CC"});
+	  			, new String[]{"C6","C3","C1","C2","C4","C5","C9","C7","C65", "C8","CB","CA","CC"});
 	  		break;
 	  }
   }
@@ -402,19 +367,19 @@ public class ArrayListBinarySearchTreeTest {
 	  		
 	  		ArrayListBinarySearchTree<String> clone = (ArrayListBinarySearchTree<String>) tree.clone();
 	  		Assert.assertEquals(true, clone.remove("C2"));//delet case 1
-	  		Assert.assertEquals(clone.inOrderTraversal().toArray(new String[0]), new String[]{"C1","C3","C4","C5","C6","C7","C8","C9","CA","CB","CC"});
-	  		Assert.assertEquals(clone.preOrderTraversal().toArray(new String[0]), new String[]{"C6","C3","C1","C4","C5","C9","C7","C8","CB","CA","CC"});
+	  		Assert.assertEquals(clone.inOrderTraversal().toArray(new String[0]), new String[]{"C1","C3","C4","C5","C6", "C65", "C7","C8","C9","CA","CB","CC"});
+	  		Assert.assertEquals(clone.preOrderTraversal().toArray(new String[0]), new String[]{"C6","C3","C1","C4","C5","C9","C7","C65", "C8","CB","CA","CC"});
 	  		
 	  		clone = (ArrayListBinarySearchTree<String>) tree.clone();
 	  		Assert.assertEquals(true, clone.remove("C1"));//delete case 2
-	  		Assert.assertEquals(clone.inOrderTraversal().toArray(new String[0]), new String[]{"C2","C3","C4","C5","C6","C7","C8","C9","CA","CB","CC"});
-	  		Assert.assertEquals(clone.preOrderTraversal().toArray(new String[0]), new String[]{"C6","C3","C2","C4","C5","C9","C7","C8","CB","CA","CC"});
+	  		Assert.assertEquals(clone.inOrderTraversal().toArray(new String[0]), new String[]{"C2","C3","C4","C5","C6","C65","C7","C8","C9","CA","CB","CC"});
+	  		Assert.assertEquals(clone.preOrderTraversal().toArray(new String[0]), new String[]{"C6","C3","C2","C4","C5","C9","C7","C65","C8","CB","CA","CC"});
 	  		
 	  		clone = (ArrayListBinarySearchTree<String>) tree.clone();
 	  		Assert.assertEquals(true, clone.remove("C6"));//delete case 3
-	  		Assert.assertEquals(clone.inOrderTraversal().toArray(new String[0]), new String[]{"C1","C2","C3","C4","C5","C7","C8","C9","CA","CB","CC"});
+	  		Assert.assertEquals(clone.inOrderTraversal().toArray(new String[0]), new String[]{"C1","C2","C3","C4","C5","C65", "C7","C8","C9","CA","CB","CC"});
 	  		Assert.assertEquals(true, clone.remove("C1"));//delete twice and check
-	  		Assert.assertEquals(clone.inOrderTraversal().toArray(new String[0]), new String[]{"C2","C3","C4","C5","C7","C8","C9","CA","CB","CC"});
+	  		Assert.assertEquals(clone.inOrderTraversal().toArray(new String[0]), new String[]{"C2","C3","C4","C5","C65", "C7", "C8","C9","CA","CB","CC"});
 	  		break;
 	  }
   }
@@ -427,9 +392,9 @@ public class ArrayListBinarySearchTreeTest {
 	  	case 1:
 	  		tree.removeAll(Arrays.asList(new String[]{}));
 	  		Assert.assertEquals(true, Arrays.equals(tree.inOrderTraversal().toArray(new String[0])
-	  				, new String[]{"C1","C2","C3","C4","C5","C6","C7","C8","C9","CA","CB","CC"}));
+	  				, new String[]{"C1","C2","C3","C4","C5","C6","C65", "C7","C8","C9","CA","CB","CC"}));
 	  		tree.removeAll(Arrays.asList(new String[]{"C6","C1","C2"}));
-	  		Assert.assertEquals(tree.inOrderTraversal().toArray(new String[0]), new String[]{"C3","C4","C5","C7","C8","C9","CA","CB","CC"});
+	  		Assert.assertEquals(tree.inOrderTraversal().toArray(new String[0]), new String[]{"C3","C4","C5","C65", "C7","C8","C9","CA","CB","CC"});
 	  		break;
 	  }
   }
@@ -499,11 +464,11 @@ public class ArrayListBinarySearchTreeTest {
 	  		Assert.assertEquals(0, tree.size());
 	  		break;
 	  	case 1:
-	  		Assert.assertEquals(12, tree.size());
+	  		Assert.assertEquals(13, tree.size());
 	  		tree.remove("C2");
-	  		Assert.assertEquals(11, tree.size());
+	  		Assert.assertEquals(12, tree.size());
 	  		tree.remove("C6");
-	  		Assert.assertEquals(10, tree.size());
+	  		Assert.assertEquals(11, tree.size());
 	  		break;
 	  }
   }
@@ -515,7 +480,7 @@ public class ArrayListBinarySearchTreeTest {
 	  		Assert.assertEquals(new String[]{}, tree.toArray());
 	  		break;
 	  	case 1:
-	  		Assert.assertEquals(tree.toArray(), new String[]{"C1","C2","C3","C4","C5","C6","C7","C8","C9","CA","CB","CC"});
+	  		Assert.assertEquals(tree.toArray(), new String[]{"C1","C2","C3","C4","C5","C6","C65", "C7","C8","C9","CA","CB","CC"});
 	  		break;
 	  }
   }
@@ -528,7 +493,7 @@ public class ArrayListBinarySearchTreeTest {
 	  		break;
 	  	case 1:
 	  		Assert.assertEquals(tree.toArray(new String[0])
-	  				, new String[]{"C1","C2","C3","C4","C5","C6","C7","C8","C9","CA","CB","CC"});
+	  				, new String[]{"C1","C2","C3","C4","C5","C6", "C65", "C7","C8","C9","CA","CB","CC"});
 	  		break;
 	  }
   }
@@ -546,18 +511,18 @@ public class ArrayListBinarySearchTreeTest {
 			ArrayListBinarySearchTree<String> clone = (ArrayListBinarySearchTree<String>) tree.clone();
 	  		@SuppressWarnings("unchecked")
 			ArrayListBinarySearchTree<String> clone2 = (ArrayListBinarySearchTree<String>) tree.clone();
-	  		Assert.assertEquals(true, tree.equals(clone));
+	  		Assert.assertEquals(tree, clone);
 	  		clone.remove("C2");
-	  		Assert.assertEquals(false, tree.equals(clone));
+	  		Assert.assertNotEquals(tree, clone);
 	  		clone2.add("CD");
-	  		Assert.assertEquals(false, tree.equals(clone2));
+	  		Assert.assertNotEquals(tree, clone2);
 	  		break;
 	  }
   }
   @Test(dataProvider = "getTree")
   public void left(int testCaseNumber, ArrayListBinarySearchTree<String> tree) throws NodeNotFoundException {
 	  switch(testCaseNumber) {
-	  	case 1:
+	  	case 0:
 	  		try {
 	  			tree.left(null);
 	  			Assert.assertEquals(false, true);
@@ -571,7 +536,7 @@ public class ArrayListBinarySearchTreeTest {
 	  			//passed
 	  		}
 	  		break;
-	  	case 2:
+	  	case 1:
 	  		Assert.assertEquals(tree.left("C6"), "C3");
 	  		Assert.assertEquals(tree.left("C3"), "C1");
 	  		Assert.assertNull(tree.left("C1"));
@@ -582,7 +547,7 @@ public class ArrayListBinarySearchTreeTest {
   @Test(dataProvider = "getTree")
   public void right(int testCaseNumber, ArrayListBinarySearchTree<String> tree) throws NodeNotFoundException {
 	  switch(testCaseNumber) {
-	  	case 1:
+	  	case 0:
 	  		try {
 	  			tree.right(null);
 	  			Assert.assertEquals(false, true);
@@ -596,18 +561,19 @@ public class ArrayListBinarySearchTreeTest {
 	  			//passed
 	  		}
 	  		break;
-	  	case 2:
+	  	case 1:
 	  		Assert.assertEquals(tree.right("C6"), "C9");
 	  		Assert.assertEquals(tree.right("C3"), "C4");
-	  		Assert.assertNull(tree.right("C7"));
+	  		Assert.assertEquals("C8", tree.right("C7"));
 	  		Assert.assertNull(tree.right("C2"));
+	  		Assert.assertNull(tree.right("C65"));
 	  		break;
 	  }
   }
   @Test(dataProvider = "getTree")
   public void successor(int testCaseNumber, ArrayListBinarySearchTree<String> tree) throws NodeNotFoundException {
 	  switch(testCaseNumber) {
-	  	case 1:
+	  	case 0:
 	  		try {
 	  			tree.predecessor(null);
 	  			Assert.assertEquals(false, true);
@@ -621,18 +587,26 @@ public class ArrayListBinarySearchTreeTest {
 	  			//passed
 	  		}
 	  		break;
-	  	case 2:
-	  		Assert.assertEquals(tree.successor("C5"), "C6");
-	  		Assert.assertEquals(tree.successor("C2"), "C3");
+	  	case 1:
+	  		Assert.assertEquals(tree.successor("C1"), "C2");
+	  		Assert.assertEquals(tree.successor("C2"), "C3");	  		
+	  		Assert.assertEquals(tree.successor("C3"), "C4");
 	  		Assert.assertEquals(tree.successor("C4"), "C5");
+	  		Assert.assertEquals(tree.successor("C5"), "C6");
+	  		Assert.assertEquals(tree.successor("C6"), "C65");
+	  		Assert.assertEquals(tree.successor("C65"), "C7");
+	  		Assert.assertEquals(tree.successor("C7"), "C8");
+	  		Assert.assertEquals(tree.successor("C8"), "C9");
 	  		Assert.assertEquals(tree.successor("C9"), "CA");
+	  		Assert.assertEquals(tree.successor("CA"), "CB");
+	  		Assert.assertEquals(tree.successor("CB"), "CC");
 	  		break;
 	  }
   }
   @Test(dataProvider = "getTree")
   public void predecessor(int testCaseNumber, ArrayListBinarySearchTree<String> tree) throws NodeNotFoundException {
 	  switch(testCaseNumber) {
-	  	case 1:
+	  	case 0:
 	  		try {
 	  			tree.predecessor(null);
 	  			Assert.assertEquals(false, true);
@@ -646,11 +620,18 @@ public class ArrayListBinarySearchTreeTest {
 	  			//passed
 	  		}
 	  		break;
-	  	case 2:
-	  		Assert.assertEquals(tree.predecessor("C6"), "C5");
-	  		Assert.assertEquals(tree.predecessor("C3"), "C2");
+	  	case 1:
+	  		Assert.assertEquals(tree.predecessor("C2"), "C1");
+	  		Assert.assertEquals(tree.predecessor("C3"), "C2");	  		
+	  		Assert.assertEquals(tree.predecessor("C4"), "C3");
 	  		Assert.assertEquals(tree.predecessor("C5"), "C4");
+	  		Assert.assertEquals(tree.predecessor("C6"), "C5");
+	  		Assert.assertEquals(tree.predecessor("C7"), "C65");
+	  		Assert.assertEquals(tree.predecessor("C8"), "C7");
+	  		Assert.assertEquals(tree.predecessor("C9"), "C8");
 	  		Assert.assertEquals(tree.predecessor("CA"), "C9");
+	  		Assert.assertEquals(tree.predecessor("CB"), "CA");
+	  		Assert.assertEquals(tree.predecessor("CC"), "CB");
 	  		break;
 	  }
   }

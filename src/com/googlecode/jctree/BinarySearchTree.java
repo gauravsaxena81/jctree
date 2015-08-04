@@ -368,16 +368,23 @@ public class BinarySearchTree<E extends Comparable<E>> implements SortedTree<E>,
 			return successorNode(node(root, value)).value;
 	}
 	private Node successorNode(Node node) throws NodeNotFoundException {
-		Node right = node.right;
+		BinarySearchTree<E>.Node right = node.right;
 		if(right != null) {
-			node = right;
-			while(node.left != null)
-				node = node.left;
-			return node;
+			while(right.left != null) {
+				right = right.left;
+			}
+			return right;
 		} else {
-			while(!node.parent.right.value.equals(node.value))
-				node = node.parent;
-			return node;
+			BinarySearchTree<E>.Node parent = node.parent;
+			while(parent != null) {
+				if(parent.left == node) { //I am right node
+					return parent;
+				} else { //I am left node
+					node = parent;
+					parent = parent.parent;
+				}
+			}
+			return null;//I am left most node, so there is no predecessor
 		}
 	}
 	@Override
@@ -385,20 +392,33 @@ public class BinarySearchTree<E extends Comparable<E>> implements SortedTree<E>,
 		checkNode(value);
 		if(isEmpty())
 			throw new NodeNotFoundException("No node was found for the parameter");
-		else
-			return predecessorNode(node(root, value)).value;
+		else {
+			BinarySearchTree<E>.Node predecessorNode = predecessorNode(node(root, value));
+			if(predecessorNode == null) {
+				return null;
+			} else {
+				return predecessorNode.value;
+			}
+		}
 	}
 	private Node predecessorNode(Node node) throws NodeNotFoundException {
-		Node left = node.left;
+		BinarySearchTree<E>.Node left = node.left;
 		if(left != null) {
-			node = left;
-			while(node.right != null)
-				node = node.right;
-			return node;
+			while(left.right != null) {
+				left = left.right;
+			}
+			return left;
 		} else {
-			while(!node.parent.left.value.equals(node.value))
-				node = node.parent;
-			return node;
+			BinarySearchTree<E>.Node parent = node.parent;
+			while(parent != null) {
+				if(parent.right == node) { //I am right node
+					return parent;
+				} else { //I am left node
+					node = parent;
+					parent = parent.parent;
+				}
+			}
+			return null;//I am left most node, so there is no predecessor
 		}
 	}
 	@Override

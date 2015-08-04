@@ -198,28 +198,28 @@ public class ArrayListBinarySearchTree<E extends Comparable<E>> implements Sorte
 		E e1 = node1; 
 		while(e1 != null) {
 			height1++;
-			e1 = parent(e1);
+			e1 = parentInternal(e1);
 		}
 		int height2 = 0;
 		E e2 = node2; 
 		while(e2 != null) {
 			height2++;
-			e2 = parent(e2);
+			e2 = parentInternal(e2);
 		}
 		if(height1 > height2) {
 			while(height1 - height2 > 0) {
-				node1 = parent(node1);
+				node1 = parentInternal(node1);
 				height1--;
 			}
 		} else {
 			while(height2 - height1 > 0) {
-				node2 = parent(node2);
+				node2 = parentInternal(node2);
 				height2--;
 			}
 		}
 		while(node1 != null && !node1.equals(node2)) {
-			node1 = parent(node1);
-			node2 = parent(node2);
+			node1 = parentInternal(node1);
+			node2 = parentInternal(node2);
 		}
 		return node1;
 	}
@@ -309,6 +309,9 @@ public class ArrayListBinarySearchTree<E extends Comparable<E>> implements Sorte
 	@Override
 	public E parent(E e) throws NodeNotFoundException {
 		checkNode(e);
+		return parentInternal(e);
+	}
+	private E parentInternal(E e) throws NodeNotFoundException {
 		int index = nodeList.indexOf(e);
 		if(index == 0)
 			return null;
@@ -403,29 +406,45 @@ public class ArrayListBinarySearchTree<E extends Comparable<E>> implements Sorte
 	public E successor(E node) throws NodeNotFoundException {
 		E right = right(node);
 		if(right != null) {
+			E parent = node;
 			node = right;
-			while(left(node) != null)
+			while(node != null) {
+				parent = node;
 				node = left(node);
-			return node;
-		} else {
-			while(!right(parent(node)).equals(node))
-				node = parent(node);
-			return node;
+			}
+			return parent;
 		}
+		E parent = parentInternal(node);
+		while(right(parent) == node) {
+			node = parent;
+			parent = parentInternal(node);
+		}
+		if(parent != null) {
+			return parent;
+		}
+		return null;
 	}
 	@Override
 	public E predecessor(E node) throws NodeNotFoundException {
 		E left = left(node);
 		if(left != null) {
+			E parent = node;
 			node = left;
-			while(right(node) != null)
+			while(node != null) {
+				parent = node;
 				node = right(node);
-			return node;
-		} else {
-			while(!left(parent(node)).equals(node))
-				node = parent(node);
-			return node;
+			}
+			return parent;
 		}
+		E parent = parentInternal(node);
+		while(left(parent) == node) {
+			node = parent;
+			parent = parentInternal(node);
+		}
+		if(parent != null) {
+			return parent;
+		}
+		return null;
 	}
 	@Override
 	public boolean removeAll(Collection<?> c) {
@@ -450,7 +469,7 @@ public class ArrayListBinarySearchTree<E extends Comparable<E>> implements Sorte
 	@Override
 	public List<E> siblings(E e) throws NodeNotFoundException {
 		checkNode(e);
-		E parent = parent(e);
+		E parent = parentInternal(e);
 		if(parent != null) {
 			List<E> children = children(parent);
 			children.remove(e);
