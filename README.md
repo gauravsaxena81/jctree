@@ -7,7 +7,7 @@ To use jctree in your maven based projects, please use the following:
 <dependency>
   <groupId>com.googlecode.jctree</groupId>
   <artifactId>jctree</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.1</version>
 </dependency>
 ```
 
