@@ -27,27 +27,31 @@ public class ArrayListTreeTest {
 	@DataProvider
 	public Object[][] getTree() {
 		try {
-			ArrayListTree<String> arrayListTree = new ArrayListTree<String>();
-			arrayListTree.add("Root1");
-			arrayListTree.add("Root1", "C1");
-			arrayListTree.add("Root1", "C2");
-			arrayListTree.add("C1", "C1-1");
-			arrayListTree.add("C1", "C1-2");
-			arrayListTree.add("C1", "C1-3");
-			arrayListTree.add("C2", "C2-1");
-			arrayListTree.add("C2", "C2-2");
-			arrayListTree.add("C1-1", "C1-1-1");
-			arrayListTree.add("C1-1", "C1-1-2");
-			arrayListTree.add("C1-2", "C1-2-1");
-			arrayListTree.add("C2-1", "C2-1-1");
-			arrayListTree.add("C2-1", "C2-1-2");
-			return new Object[][]{{0, new ArrayListTree<String>()},{1, arrayListTree}};
+			return new Object[][]{{0, new ArrayListTree<String>()},{1, getBigTree()}};
 		} catch(NodeNotFoundException e) {
 			throw new RuntimeException();
 		}
 	  }
 
-  @Test(dataProvider = "getTree")
+	private ArrayListTree<String> getBigTree() throws NodeNotFoundException {
+		ArrayListTree<String> arrayListTree = new ArrayListTree<String>();
+		arrayListTree.add("Root1");
+		arrayListTree.add("Root1", "C1");
+		arrayListTree.add("Root1", "C2");
+		arrayListTree.add("C1", "C1-1");
+		arrayListTree.add("C1", "C1-2");
+		arrayListTree.add("C1", "C1-3");
+		arrayListTree.add("C2", "C2-1");
+		arrayListTree.add("C2", "C2-2");
+		arrayListTree.add("C1-1", "C1-1-1");
+		arrayListTree.add("C1-1", "C1-1-2");
+		arrayListTree.add("C1-2", "C1-2-1");
+		arrayListTree.add("C2-1", "C2-1-1");
+		arrayListTree.add("C2-1", "C2-1-2");
+		return arrayListTree;
+	}
+
+@Test(dataProvider = "getTree")
   public void addE(int testCaseNumber, ArrayListTree<String> tree) throws NodeNotFoundException {
 	int initialSize = tree.size();
     Assert.assertEquals(true, tree.add("New"));
@@ -566,5 +570,57 @@ public class ArrayListTreeTest {
 	  		Assert.assertEquals(false, tree.equals(clone2));
 	  		break;
 	  }
+  }
+  @Test
+  public void testReuseDeletedNodeSpace() throws NodeNotFoundException {
+	  ArrayListTree<String> tree = getBigTree();
+	  int size = tree.getNodeList().size();
+	  tree.remove("C2-1-2");
+	  tree.add("C2-1", "C2-1-2");
+	  Assert.assertEquals(size, tree.getNodeList().size());
+	  
+	  tree.remove("C2-1-1");
+	  tree.add("C2-1", "C2-1-1");
+	  Assert.assertEquals(size, tree.getNodeList().size());
+	  
+	  tree.remove("C1-1-2");
+	  tree.add("C1-1", "C1-1-2");
+	  Assert.assertEquals(size, tree.getNodeList().size());
+	  
+	  tree.remove("C1-1-1");
+	  tree.add("C1-1", "C1-1-1");
+	  Assert.assertEquals(size, tree.getNodeList().size());
+	  
+	  tree.remove("C2-1");
+	  tree.add("C2", "C2-1");
+	  tree.add("C2-1", "C2-1-1");
+	  tree.add("C2-1", "C2-1-2");
+	  Assert.assertEquals(size, tree.getNodeList().size());
+	  
+	  tree.remove("C1");
+	  tree.add("Root1", "C1");
+	  tree.add("C1", "C1-1");
+	  tree.add("C1", "C1-2");
+	  tree.add("C1", "C1-3");
+	  tree.add("C1-1", "C1-1-1");
+	  tree.add("C1-1", "C1-1-2");
+	  tree.add("C1-2", "C1-2-1");
+	  Assert.assertEquals(size, tree.getNodeList().size());
+	  
+	  tree.remove("Root1");
+	  tree.add("Root1");
+	  tree.add("Root1", "C1");
+	  tree.add("Root1", "C2");
+	  tree.add("C1", "C1-1");
+	  tree.add("C1", "C1-2");
+	  tree.add("C1", "C1-3");
+	  tree.add("C2", "C2-1");
+	  tree.add("C2", "C2-2");
+	  tree.add("C1-1", "C1-1-1");
+	  tree.add("C1-1", "C1-1-2");
+	  tree.add("C1-2", "C1-2-1");
+	  tree.add("C2-1", "C2-1-1");
+	  tree.add("C2-1", "C2-1-2");
+	  Assert.assertEquals(size, tree.getNodeList().size());
   }
 }

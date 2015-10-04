@@ -13,6 +13,9 @@
  */
 package com.googlecode.jctree;
 
+import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -28,12 +31,24 @@ import java.util.List;
  * @param <E>
  */
 public class ArrayListTree<E> implements Tree<E>, Cloneable {
+	private static final int DEFAULT_TREE_SIZE = 16;
 	private ArrayList<E> nodeList = new ArrayList<E>();
 	private ArrayList<Integer> parentList = new ArrayList<Integer>();
-	private ArrayList<ArrayList<Integer>> childrenList = new ArrayList<ArrayList<Integer>>();
+	private ArrayList<IntArrayList> childrenList = new ArrayList<IntArrayList>();
+	private IntArrayFIFOQueue emptySlotsList = new IntArrayFIFOQueue();
 	private int size = 0;
 	private int depth = 0;
 	private int rootIndex = -1;
+	
+	public ArrayListTree(int size) {
+		nodeList = new ArrayList<E>(size);
+		parentList = new ArrayList<Integer>(size);
+		childrenList = new ArrayList<IntArrayList>(size);
+	}
+	
+	public ArrayListTree() {
+		this(DEFAULT_TREE_SIZE);
+	}
 	
 	/**
 	 * If tree is empty, it adds a root. In case tree is not empty, it will attempt to add parameter as a child of the root 
@@ -53,30 +68,44 @@ public class ArrayListTree<E> implements Tree<E>, Cloneable {
 	@Override
 	public boolean add(E parent, E child) throws NodeNotFoundException {
 		checkNode(child);
+		if(nodeList.size() == Integer.MAX_VALUE)
+			throw new OutOfMemoryError();
 		if(isRootElementBeingAdded(parent, child))
 			return true;
 		int	parentIndex = nodeList.indexOf(parent);
 		if(parentIndex > -1) {
 			int childIndex = nodeList.indexOf(child);
 			if(childIndex == -1) {
-				nodeList.add(child);
-				parentList.add(parentIndex);
-				childrenList.get(parentIndex).add(nodeList.size() - 1);
-				childrenList.add(new ArrayList<Integer>());
-				size++;
-				int currentDepth = 2;
-				while(parentIndex > 0) {
-					currentDepth++;
-					parentIndex = parentList.get(parentIndex);
+				if(emptySlotsList.isEmpty()) {
+					return addElementToTheEnd(child, parentIndex);
+				} else {
+					int slot = emptySlotsList.dequeueInt();
+					return addElementToTheSlot(slot, child, parentIndex);
 				}
-				depth = Math.max(currentDepth, depth);
-				return true;
 			} else {
 				nodeList.set(childIndex, child);
 				return false;
 			}
 		} else
 			throw new NodeNotFoundException("No node was found for parent object");
+	}
+	private boolean addElementToTheSlot(int slot, E child, int parentIndex) {
+		nodeList.set(slot, child);
+		parentList.set(slot, parentIndex);
+		childrenList.get(parentIndex).add(slot);
+		childrenList.set(slot, new IntArrayList());
+		size++;
+		depth = Math.max(recalculateDepth(parentIndex, 2), depth);
+		return true;
+	}
+	private boolean addElementToTheEnd(E child, int parentIndex) {
+		nodeList.add(child);
+		parentList.add(parentIndex);
+		childrenList.get(parentIndex).add(nodeList.size() - 1);
+		childrenList.add(new IntArrayList());
+		size++;
+		depth = Math.max(recalculateDepth(parentIndex, 2), depth);
+		return true;		
 	}
 	private boolean isRootElementBeingAdded(E parent, E child) {
 		if(parent == null) {
@@ -92,7 +121,7 @@ public class ArrayListTree<E> implements Tree<E>, Cloneable {
 		nodeList.add(child);
 		rootIndex = nodeList.size() - 1;
 		parentList.add(-1);
-		childrenList.add(new ArrayList<Integer>());
+		childrenList.add(new IntArrayList());
 		size++;
 		depth++;		
 	}
@@ -126,7 +155,7 @@ public class ArrayListTree<E> implements Tree<E>, Cloneable {
 		checkNode(e);
 		int index = nodeList.indexOf(e);
 		if(index > -1) {
-			ArrayList<Integer> childrenIndexList = childrenList.get(index);
+			IntArrayList childrenIndexList = childrenList.get(index);
 			ArrayList<E> children = new ArrayList<E>(childrenIndexList.size());
 			for (Integer i : childrenIndexList) {
 				children.add(nodeList.get(i));
@@ -167,11 +196,11 @@ public class ArrayListTree<E> implements Tree<E>, Cloneable {
 			v = (ArrayListTree<E>) super.clone();
 			v.nodeList = (ArrayList<E>) nodeList.clone();
 			v.parentList = (ArrayList<Integer>) parentList.clone();
-			v.childrenList = new ArrayList<ArrayList<Integer>>();
+			v.childrenList = new ArrayList<IntArrayList>();
 			v.size = this.size;
 			v.depth = this.depth;
 			for(int i = 0; i < childrenList.size(); i++)
-				v.childrenList.add((ArrayList<Integer>) childrenList.get(i).clone());
+				v.childrenList.add((IntArrayList) childrenList.get(i).clone());
 		} catch (CloneNotSupportedException e) {
 			//This should't happen because we are cloneable
 		}
@@ -265,7 +294,7 @@ public class ArrayListTree<E> implements Tree<E>, Cloneable {
 			return leaves(rootIndex, new ArrayList<E>());
 	}
 	private List<E> leaves(int nodeIndex, ArrayList<E> list) {
-		ArrayList<Integer> children = childrenList.get(nodeIndex);
+		IntArrayList children = childrenList.get(nodeIndex);
 		if(children.size() > 0)	{
 			int i = 0;
 			for(; i < (int)Math.ceil((double)children.size() / 2); i++)
@@ -391,7 +420,7 @@ public class ArrayListTree<E> implements Tree<E>, Cloneable {
 		return inOrderTraversal();
 	}
 	private List<E> inorderOrderTraversal(int nodeIndex, ArrayList<E> list) {
-		ArrayList<Integer> children = childrenList.get(nodeIndex);
+		IntArrayList children = childrenList.get(nodeIndex);
 		if(children.size() > 0)	{
 			int i = 0;
 			for(; i < (int)Math.ceil((double)children.size() / 2); i++)
@@ -406,7 +435,7 @@ public class ArrayListTree<E> implements Tree<E>, Cloneable {
 	private List<E> levelOrderTraversal(ArrayList<E> list, LinkedList<Integer> queue) {
 		while(!queue.isEmpty()) {
 			list.add(nodeList.get(queue.getFirst()));
-			ArrayList<Integer> children = childrenList.get(queue.getFirst());
+			IntArrayList children = childrenList.get(queue.getFirst());
 			for(int i = 0; i < children.size(); i++)
 				queue.add(children.get(i));
 			queue.remove();
@@ -414,7 +443,7 @@ public class ArrayListTree<E> implements Tree<E>, Cloneable {
 		return list;
 	}
 	private List<E> postOrderTraversal(int nodeIndex, ArrayList<E> list) {
-		ArrayList<Integer> children = childrenList.get(nodeIndex);
+		IntArrayList children = childrenList.get(nodeIndex);
 		for(int i = 0; i < children.size(); i++)
 			postOrderTraversal(children.get(i), list);
 		if(nodeList.get(nodeIndex) != null)
@@ -424,7 +453,7 @@ public class ArrayListTree<E> implements Tree<E>, Cloneable {
 	private List<E> preOrderTraversal(int nodeIndex, ArrayList<E> list) {
 		if(nodeList.get(nodeIndex) != null)
 			list.add(nodeList.get(nodeIndex));
-		ArrayList<Integer> children = childrenList.get(nodeIndex);
+		IntArrayList children = childrenList.get(nodeIndex);
 		for(int i = 0; i < children.size(); i++)
 			preOrderTraversal(children.get(i), list);
 		return list;
@@ -443,11 +472,12 @@ public class ArrayListTree<E> implements Tree<E>, Cloneable {
 				if(parentIndex > -1)//if node is not root
 					childrenList.get(parentIndex).remove(Integer.valueOf(index));
 				nodeList.set(index, null);
+				emptySlotsList.enqueue(index);
 				size--;
-				ArrayList<Integer> children = childrenList.get(index);
+				IntArrayList children = childrenList.get(index);
 				for (int j = 0; j < children.size();) 
 					remove(children.get(0).intValue());
-				childrenList.get(index).clear();
+				childrenList.set(index, null);
 				return true;
 			}
 		} else
@@ -481,5 +511,13 @@ public class ArrayListTree<E> implements Tree<E>, Cloneable {
 			}
 		} else
 			return false;
+	}
+	
+	/**
+	 * Default visibility for unit testing 
+	 * @return 
+	 */
+	ArrayList<E> getNodeList() {
+		return nodeList;
 	}
 }
